@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MELAMINI | Catálogo Digital de Repisas Flotantes</title>
+    <style>
+        /* --- ESTILOS GLOBALES & VARIABLES --- */
+        :root {
+            --bg: #0a0a0a;
+            --fg: #fafafa;
+            --card: #121212;
+            --primary: #6366f1;
+            --secondary: #22d3ee;
+            --text-muted: #a3a3a3;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .section-title span {
+            color: var(--primary);
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- BOTONES --- */
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #4f46e5);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+        }
+
+        /* --- 1. HEADER (NAVEGACIÓN FIJA) --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-item a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .nav-item a:hover {
+            color: var(--secondary);
+        }
+
+        /* --- 2. HERO SECTION (PARALLAX VIDEO) --- */
+        .hero {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            padding: 0 20px;
+        }
+
+        /* Contenedor del video con efecto parallax */
+        .parallax-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%; /* Más alto para permitir el desplazamiento */
+            z-index: -1;
+            pointer-events: none;
+            transform: translateY(0);
+            will-change: transform;
+        }
+
+        .parallax-bg iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Capa oscura para legibilidad del texto */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.5) 0%, rgba(10,10,10,0.95) 100%);
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero-content h1 span {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 35px;
+            font-weight: 300;
+        }
+
+        /* --- 3. SECCIÓN MEDIDAS Y PRECIOS --- */
+        .specs-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .grid-medidas {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card-medida {
+            background-color: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-medida::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .card-medida:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        .card-medida:hover::before {
+            opacity: 1;
+        }
+
+        .card-medida .dim {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .card-medida .espesor {
+            font-size: 0.85rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-medida .precio {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        /* Panel Lateral de Personalización */
+        .panel-personalizacion {
+            background-color: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 30px;
+            position: sticky;
+            top: 100px;
+        }
+
+        .panel-personalizacion h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .color-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .color-pill {
+            padding: 8px 16px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            text-transform: capitalize;
+            color: var(--text-muted);
+        }
+
+        .color-pill.active {
+            background-color: rgba(34, 211, 238, 0.1);
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        .info-instalacion {
+            background: rgba(99, 102, 241, 0.05);
+            border-left: 3px solid var(--primary);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+        }
+
+        .info-instalacion strong {
+            color: #fff;
+        }
+
+        /* --- 4. ABOUT SECTION --- */
+        .about {
+            background-color: rgba(18, 18, 18, 0.4);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.02);
+            padding: 80px 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .about-text p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+
+        .about-badge-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .badge-card {
+            background-color: var(--card);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .badge-card h4 {
+            color: var(--secondary);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .badge-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* --- 5. SERVICES SECTION --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background-color: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 40px;
+            border-radius: 16px;
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            border-color: rgba(34, 211, 238, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .service-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .service-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- 7. CTA SECTION --- */
+        .cta {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(34, 211, 238, 0.05) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: 24px;
+            padding: 80px 40px;
+            margin-top: 50px;
+            margin-bottom: 100px;
+        }
+
+        .cta h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 35px auto;
+        }
+
+        /* --- 8. FOOTER --- */
+        footer {
+            background-color: #050505;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 968px) {
+            .specs-container, .about {
+                grid-template-columns: 1fr;
+            }
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+            .panel-personalizacion {
+                position: static;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-menu {
+                display: none; /* Ocultado por simplicidad vanilla sin hamburguesa compleja */
+            }
+            section {
+                padding: 60px 15px;
+            }
+            .hero-content h1 {
+                font-size: 2.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="header">
+        <div class="nav-container">
+            <a href="#" class="logo">MELA<span>MINI</span></a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#hero">Inicio</a></li>
+                <li class="nav-item"><a href="#medidas">Medidas</a></li>
+                <li class="nav-item"><a href="#about">Nosotros</a></li>
+                <li class="nav-item"><a href="#servicios">Servicios</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section id="hero" class="hero">
+        <div class="parallax-bg" id="parallaxVideo">
+            <iframe src="https://player.cloudinary.com/embed/?cloud_name=di0e5vemr&public_id=el_promt_es_para_google_flow_d_cunhda&autoplay=true&loop=true&muted=true&controls=false" allow="autoplay; fullscreen"></iframe>
+        </div>
+        <div class="hero-content">
+            <h1>Líneas Perfectas.<br><span>Soporte Invisible.</span></h1>
+            <p>Repisas flotantes de melamina premium con 3 cm de espesor sólido. El equilibrio exacto entre sofisticación estructural y minimalismo moderno.</p>
+            <a href="https://wa.me/591XXXXXX?text=Hola%20MELAMINI,%20me%20interesa%20cotizar%20una%20repisa%20flotante." class="btn btn-primary" target="_blank">Cotizar por WhatsApp</a>
+        </div>
+    </section>
+
+    <section id="medidas">
+        <h2 class="section-title">Medidas y <span>Dimensiones</span></h2>
+        
+        <div class="specs-container">
+            <div class="grid-medidas">
+                <div class="card-medida">
+                    <div class="dim">80 x 15 cm</div>
+                    <div class="espesor">3 cm Espesor</div>
+                    <div class="precio">90 Bs</div>
+                </div>
+                <div class="card-medida">
+                    <div class="dim">100 x 15 cm</div>
+                    <div class="espesor">3 cm Espesor</div>
+                    <div class="precio">110 Bs</div>
+                </div>
+                <div class="card-medida">
+                    <div class="dim">120 x 15 cm</div>
+                    <div class="espesor">3 cm Espesor</div>
+                    <div class="precio">120 Bs</div>
+                </div>
+
+                <div class="card-medida">
+                    <div class="dim">80 x 20 cm</div>
+                    <div class="espesor">3 cm Espesor</div>
+                    <div class="precio">100 Bs</div>
+                </div>
+                <div class="card-medida">
+                    <div class="dim">100 x 20 cm</div>
+                    <div class="espesor">3 cm Espesor</div>
+                    <div class="precio">110 Bs</div>
+                </div>
+                <div class="card-medida">
+                    <div class="dim">120 x 20 cm</div>
+                    <div class="espesor">3 cm Espesor</div>
+                    <div class="precio">120 Bs</div>
+                </div>
+
+                <div class="card-medida">
+                    <div class="dim">80 x 25 cm</div>
+                    <div class="espesor">3 cm Espesor</div>
+                    <div class="precio">120 Bs</div>
+                </div>
+                <div class="card-medida">
+                    <div class="dim">100 x 25 cm</div>
+                    <div class="espesor">3 cm Espesor</div>
+                    <div class="precio">130 Bs</div>
+                </div>
+                <div class="card-medida">
+                    <div class="dim">120 x 25 cm</div>
+                    <div class="espesor">3 cm Espesor</div>
+                    <div class="precio">140 Bs</div>
+                </div>
+            </div>
+
+            <div class="panel-personalizacion">
+                <h3>Acabados Disponibles</h3>
+                <div class="color-selector">
+                    <span class="color-pill active">beige</span>
+                    <span class="color-pill">negro</span>
+                    <span class="color-pill">blanco</span>
+                    <span class="color-pill">nogal</span>
+                    <span class="color-pill">café</span>
+                </div>
+
+                <div class="info-instalacion">
+                    <p>🔧 <strong>Políticas de Instalación:</strong> La instalación en muro es completamente <strong>gratuita</strong> a partir de la compra de 2 unidades. Para una sola pieza, el costo de montaje es de 25 Bs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="about">
+            <div class="about-text">
+                <h3>Diseño Modular a tu Medida</h3>
+                <p>En <strong>MELAMINI</strong> transformamos tableros de alta densidad en soluciones arquitectónicas funcionales. Nos especializamos en el armado y configuración de muebles personalizados con estándares de calidad estrictos.</p>
+                <p>Nuestras piezas flotantes eliminan el ruido visual de los soportes tradicionales, ofreciendo una estética limpia, duradera y de gran capacidad de carga.</p>
+            </div>
+            <div class="about-badge-grid">
+                <div class="badge-card">
+                    <h4>Espesor Real 3cm</h4>
+                    <p>Estructura robusta que garantiza estabilidad y presencia visual superior en tus espacios.</p>
+                </div>
+                <div class="badge-card">
+                    <h4>Corte Preciso</h4>
+                    <p>Terminaciones milimétricas y tapacantos sellados para resistir el paso del tiempo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicios">
+        <h2 class="section-title">Lo que <span>Ofrecemos</span></h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">📐</div>
+                <h3>Muebles Personalizados</h3>
+                <p>Diseño y modulación de mobiliario adaptado exactamente al metraje y las necesidades técnicas de tu entorno hogareño o corporativo.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🛠️</div>
+                <h3>Montaje Profesional</h3>
+                <p>Personal técnico capacitado asegura un anclaje invisible firme, seguro y perfectamente nivelado en cualquier tipo de muro apto.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">✨</div>
+                <h3>Materiales de Alta Gama</h3>
+                <p>Selección selecta de melaminas con texturas realistas y núcleos de alta densidad resistentes a la flexión estructural.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto">
+        <div class="cta">
+            <h2>¿Listo para elevar tus muros?</h2>
+            <p>Haz clic abajo para iniciar tu pedido personalizado. Coordina medidas, colores y agenda tu instalación directamente por nuestro canal oficial.</p>
+            <a href="https://wa.me/591XXXXXX?text=Hola%20MELAMINI,%20quiero%20hacer%20un%20pedido%20de%20repisas%20flotantes." class="btn btn-primary" target="_blank">Ordenar mi Repisa Ahora</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 MELAMINI. Todos los derechos reservados. Sucre, Bolivia.</p>
+        <ul class="footer-links">
+            <li><a href="#hero">Inicio</a></li>
+            <li><a href="#medidas">Catálogo</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+        </ul>
+    </footer>
+
+    <script>
+        // --- EFECTO PARALLAX DE VIDEO (HERO) ---
+        window.addEventListener('scroll', function() {
+            const scrollValue = window.scrollY;
+            const parallaxBg = document.getElementById('parallaxVideo');
+            
+            // Desplaza el video a una fracción del scroll para el efecto visual de profundidad
+            if (window.innerWidth > 968) {
+                parallaxBg.style.transform = `translateY(${scrollValue * 0.4}px)`;
+            } else {
+                parallaxBg.style.transform = 'translateY(0)';
+            }
+        });
+
+        // --- INTERACTIVIDAD BÁSICA DEL SELECTOR DE COLOR ---
+        const colorPills = document.querySelectorAll('.color-pill');
+        colorPills.forEach(pill => {
+            pill.addEventListener('click', function() {
+                // Remover clase activa de los otros
+                document.querySelector('.color-pill.active').classList.remove('active');
+                // Agregar al seleccionado
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
